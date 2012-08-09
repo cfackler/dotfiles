@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Heavily based on "A unix style mail setup", by tomka@gentoo.org
+# http://dev.gentoo.org/~tomka/mail.html
+
+fullsync="offlineimap -o -u quiet"
+quicksync="offlineimap -o -f INBOX -u quiet"
+
+# time (in seconds) between full syncs
+fullsyncdiff=1800
+
+# check for connectivity
+if ! ping -c1 www.google.com > /dev/null 2>&1; then
+    if ! wget -O - www.google.com > /dev/null 2>&1; then
+        # no Internet connectivity
+        exit 1;
+    fi
+fi
+
+# test for running offlineimap
+pid=$(pgrep -f "/usr/bin/offlineimap")
+if [[ $pid -gt 0 ]]; then
+    # offlineimap already running, it's probably stuck
+    # kill it and try again
+    kill -s KILL $pid
+fi
+
+# determine time since last sync
+curtime=$(date +%s)
+if [ -e ~/.offlineimap_fullsynctime ]; then
+    # get time of last full sync
+    read -r lastfullsync < ~/.offlineimap_fullsynctime
+    timediff=$((curtime - lastfullsync))
+    if [ $timediff -gt $fullsyncdiff ]; then
+        # we need to do a new full sync
+        echo $curtime > ~/.offlineimap_fullsynctime
+        exec $fullsync
+    else
+        exec $quicksync
+    fi
+else
+    # haven't run a full sync yet, do one
+    echo $curtime > ~/.offlineimap_fullsynctime
+    exec $fullsync
+fi
