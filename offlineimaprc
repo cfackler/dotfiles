@@ -1,0 +1,46 @@
+[general]
+accounts = Gmail, RPI
+ui = ttyui
+maxsyncaccounts = 4
+pythonfile = ~/.offlineimap.py
+
+[Account Gmail]
+localrepository = Gmail-Local
+remoterepository = Gmail-Remote
+maxconnections = 3
+
+[Repository Gmail-Local]
+type = Maildir
+localfolders = ~/.maildir/Gmail
+sep = /
+nametrans = gmail_nt_local
+
+[Repository Gmail-Remote]
+type = Gmail
+remoteusereval = get_username("imap.gmail.com")
+remotepasseval = get_password("imap.gmail.com")
+realdelete = no
+nametrans = gmail_nt_remote
+folderfilter = exclude(['[Gmail]/All Mail',
+                        '[Gmail]/Trash',
+                        '[Gmail]/Spam',
+                        '[Gmail]/Important'])
+cert_fingerprint = f3043dd689a2e7dddfbef82703a6c65ea9b634c1
+
+[Account RPI]
+localrepository = RPI-Local
+remoterepository = RPI-Remote
+maxconnections = 3
+
+[Repository RPI-Local]
+type = Maildir
+localfolders = ~/.maildir/RPI
+sep = /
+
+[Repository RPI-Remote]
+type = IMAP
+remotehost = mail.rpi.edu
+ssl = yes
+remoteusereval = get_username("mail.rpi.edu")
+remotepasseval = get_password("mail.rpi.edu")
+cert_fingerprint = 43f907f9491c130e3c216d29e05bc9013903f804
