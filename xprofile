@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# laptop-specific things
+if [ `hostname` = spock ]; then
+    # fix middle-button scroll with TrackPoint
+    xinput set-int-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation" 8 1
+    xinput set-int-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Button" 8 2
+
+    # allow tapping to click on TouchPad
+    # 1 finger: left click
+    # 2 fingers: right click
+    # 3 fingers: middle click
+    xinput set-int-prop "SynPS/2 Synaptics TouchPad" "Synaptics Tap Action" 8 0 0 0 0 1 3 2
+
+    # turn on circular scrolling
+    xinput set-int-prop "SynPS/2 Synaptics TouchPad" "Synaptics Circular Scrolling" 8 1
+    # but only from left edge
+    xinput set-int-prop "SynPS/2 Synaptics TouchPad" "Synaptics Circular Scrolling Trigger" 8 7
+
+    # enable palm detection
+    xinput set-int-prop "SynPS/2 Synaptics TouchPad" "Synaptics Palm Detection" 8 1
+
+    # start wicd tray icon to manage networking
+    wicd-gtk --tray &
+fi
+
+# need a dbus session for gnome-keyring
+. /etc/X11/xinit/xinitrc.d/80-dbus
+
+# yes, you feel dirty inside for doing this
+eval $(gnome-keyring-daemon --start --components=pkcs11,secrets)
+export GNOME_KEYRING_CONTROL
+export GNOME_KEYRING_PID
+
+# save dbus session info so we can source it from offlineimap cronjob
+touch $HOME/.Xdbus
+chmod 600 $HOME/.Xdbus
+env | grep DBUS_SESSION_BUS_ADDRESS > $HOME/.Xdbus
+echo 'export DBUS_SESSION_BUS_ADDRESS' >> $HOME/.Xdbus
+
+# get ssh-agent and gpg-agent environment variables
+eval `keychain --quiet --eval --agents ssh,gpg`
+
+# start udiskie to automount removable media
+udiskie &
