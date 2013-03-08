@@ -1,0 +1,15 @@
+! custom modifier keys:
+! - turn Caps Lock into Ctrl
+! - change left Ctrl into Hyper (Mod3)
+! - change right Alt into Super (Mod4)
+clear Lock
+remove Control = Control_L
+remove Mod1 = Alt_R
+
+keysym Control_L = Hyper_L
+keysym Caps_Lock = Control_L
+keysym Alt_R = Super_R
+
+add Control = Control_L
+add Mod3 = Hyper_L
+add Mod4 = Super_R
