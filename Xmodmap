@@ -5,6 +5,7 @@
 clear Lock
 remove Control = Control_L
 remove Mod1 = Alt_R
+remove Mod4 = Hyper_L
 
 keysym Control_L = Hyper_L
 keysym Caps_Lock = Control_L
