@@ -22,10 +22,11 @@ remotepasseval = get_password("imap.gmail.com")
 realdelete = no
 nametrans = gmail_nt_remote
 folderfilter = exclude(['[Gmail]/All Mail',
+                        '[Gmail]/Sent Mail',
                         '[Gmail]/Trash',
                         '[Gmail]/Spam',
                         '[Gmail]/Important'])
-cert_fingerprint = 6d1b5b5ee0180ab493b71d3b94534b5ab937d042
+cert_fingerprint = b0ba392bba326e6feb1add4d04fa0fb86cd173fa
 
 [Account RPI]
 localrepository = RPI-Local
