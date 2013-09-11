@@ -44,4 +44,4 @@ remotehost = mail.rpi.edu
 ssl = yes
 remoteusereval = get_username("mail.rpi.edu")
 remotepasseval = get_password("mail.rpi.edu")
-cert_fingerprint = 43f907f9491c130e3c216d29e05bc9013903f804
+cert_fingerprint = fb443deea7fb101e3eb59ab2cb12a8b71414d2c9
